@@ -43,6 +43,9 @@ h3{font-size:16px;margin:16px 0 8px;color:#132b58}
 .day .net{align-self:center;font-weight:800;text-align:right}
 .day.off .net{color:var(--muted);font-weight:600}
 .day.off .t{visibility:hidden}
+.day .rep{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:8px;border-top:1px dashed #cfdaeb;font-size:14px;font-weight:600;color:#15417a}
+.day .rep .muted{font-weight:400}
+.rep-ok{margin:0 0 10px}
 .seg{display:flex;border:1px solid #c4d2e7;border-radius:10px;overflow:hidden;min-height:44px}
 .seg button{flex:1;border:0;background:#fff;color:#15417a;font-weight:700;padding:6px 8px}
 .seg button[aria-pressed=true]{background:var(--blue);color:#fff}
@@ -189,7 +192,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 </main>
 
 <footer>
-  ADC TEC • Da 6x1 para a 5x2 • versão 1.0 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+  ADC TEC • Da 6x1 para a 5x2 • versão 1.1 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
 </footer>
 
 <script>
@@ -284,20 +287,32 @@ function badges(o){const w=o.A,tot=total(w),n8=ORDER.filter(i=>w[i].on&&net(w[i]
 function applyOption(){const o=buildOptions(T)[optIdx];if(!o)return;teams={A:clone(o.A),B:clone(o.B)}}
 
 // ---------- editor da semana ----------
+// repetir: aparece no primeiro dia de trabalho e no último dia alterado
+const lastEdit={}, repMsg={};
 function weekEditor(w,id){
-  return `<div class="wk" id="${id}">${ORDER.map(i=>{const d=w[i];return `<div class="day${d.on?'':' off'}" data-i="${i}">
+  const first=ORDER.find(i=>w[i].on), shown=lastEdit[id]!=null&&w[lastEdit[id]].on?lastEdit[id]:first;
+  const rep=i=>{if(i!==shown||!ok(w[i]))return '';
+    const others=ORDER.filter(j=>j!==i&&w[j].on).length;
+    return `<div class="rep"><span>🔁 Repetir o horário de ${DN[i].toLowerCase()}:</span>${id==='edToday'?`<button type="button" class="btn sec small" data-rep="wk">De segunda a sexta</button>`:''}${others?`<button type="button" class="btn sec small" data-rep="all">Em todos os dias de trabalho</button>`:''}${id!=='edToday'&&!others?'<span class="muted">marque outros dias como “Trabalha” para repetir</span>':''}</div>`};
+  return `${repMsg[id]?`<div class="tip rep-ok" role="status">✅ ${esc(repMsg[id])}</div>`:''}<div class="wk" id="${id}">${ORDER.map(i=>{const d=w[i];return `<div class="day${d.on?'':' off'}" data-i="${i}">
     <span class="dn">${DN[i]}</span>
     <div class="seg" role="group" aria-label="${DN[i]}: trabalha?"><button type="button" data-on="1" aria-pressed="${d.on}">Trabalha</button><button type="button" data-on="0" aria-pressed="${!d.on}">Folga</button></div>
     <label class="t">Entrada<input type="time" data-k="start" value="${esc(d.start)}" aria-label="Entrada de ${DN[i]}"></label>
     <label class="t">Saída<input type="time" data-k="end" value="${esc(d.end)}" aria-label="Saída de ${DN[i]}"></label>
     <label class="t">Almoço<select data-k="brk" aria-label="Almoço de ${DN[i]}">${BREAKS.map(([v,t])=>`<option value="${v}"${+d.brk===v?' selected':''}>${t}</option>`).join('')}${BREAKS.some(b=>b[0]===+d.brk)?'':`<option value="${d.brk}" selected>${d.brk} minutos</option>`}</select></label>
-    <span class="net">${d.on?(ok(d)?fmt(net(d)):'—'):'Folga'}</span></div>`}).join('')}</div>`;
+    <span class="net">${d.on?(ok(d)?fmt(net(d)):'—'):'Folga'}</span>${rep(i)}</div>`}).join('')}</div>`;
 }
 function bindEditor(id,w,onChange){
   const box=$(id);if(!box)return;
-  box.querySelectorAll('.day').forEach(row=>{const d=w[+row.dataset.i];
-    row.querySelectorAll('[data-on]').forEach(b=>b.onclick=()=>{d.on=b.dataset.on==='1';touched=true;onChange(true)});
-    row.querySelectorAll('[data-k]').forEach(el=>el.onchange=()=>{d[el.dataset.k]=el.dataset.k==='brk'?+el.value:el.value;touched=true;onChange(false)});
+  delete repMsg[id];
+  box.querySelectorAll('.day').forEach(row=>{const i=+row.dataset.i,d=w[i];
+    row.querySelectorAll('[data-on]').forEach(b=>b.onclick=()=>{d.on=b.dataset.on==='1';lastEdit[id]=i;touched=true;onChange(true)});
+    row.querySelectorAll('[data-k]').forEach(el=>el.onchange=()=>{d[el.dataset.k]=el.dataset.k==='brk'?+el.value:el.value;lastEdit[id]=i;touched=true;onChange(false)});
+    row.querySelectorAll('[data-rep]').forEach(b=>b.onclick=()=>{
+      const tgt=b.dataset.rep==='wk'?[1,2,3,4,5].filter(j=>j!==i):ORDER.filter(j=>j!==i&&w[j].on);
+      tgt.forEach(j=>{w[j]={...d,on:true}});
+      repMsg[id]=`Horário de ${DN[i].toLowerCase()} (${fh(d.start)} às ${fh(d.end)}, ${brkLabel(d.brk).toLowerCase()}${+d.brk?' de almoço':''}) repetido em ${joinE(tgt.map(j=>DN[j].toLowerCase()))}.`;
+      lastEdit[id]=i;touched=true;onChange(true);});
   });
 }
 const pills=(w)=>`<div class="sum"><div class="pill"><b>${fmt(total(w))}</b><span>por semana</span></div><div class="pill"><b>${offs(w)}</b><span>${offs(w)===1?'folga':'folgas'} por semana</span></div><div class="pill"><b>${7-offs(w)}</b><span>dias de trabalho</span></div></div>`;
@@ -329,7 +344,7 @@ const STEPS=[
   ${lia('Mostre como sua equipe trabalha <b>hoje</b>. Já deixei um exemplo comum de 6x1: segunda a sexta das 8h às 17h e sábado de manhã. <b>Troque para o seu horário.</b>')}
   <div class="card">
     <h1>Como é a escala hoje?</h1>
-    <p class="muted small">Para cada dia, diga se a equipe trabalha ou folga e o horário.</p>
+    <p class="muted small">Para cada dia, diga se a equipe trabalha ou folga e o horário. <b>Dica:</b> preencha um dia e use o botão 🔁 <b>Repetir</b> para copiar o mesmo horário para os outros.</p>
     ${weekEditor(today,'edToday')}
     ${pills(today)}
     <h3>Como fica a partir de 16/12/2026</h3>
