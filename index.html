@@ -192,7 +192,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 </main>
 
 <footer>
-  ADC TEC • Da 6x1 para a 5x2 • versão 1.1 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+  ADC TEC • Da 6x1 para a 5x2 • versão 1.2 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
 </footer>
 
 <script>
@@ -347,8 +347,6 @@ const STEPS=[
     <p class="muted small">Para cada dia, diga se a equipe trabalha ou folga e o horário. <b>Dica:</b> preencha um dia e use o botão 🔁 <b>Repetir</b> para copiar o mesmo horário para os outros.</p>
     ${weekEditor(today,'edToday')}
     ${pills(today)}
-    <h3>Como fica a partir de 16/12/2026</h3>
-    ${alertsHTML(check(today,42).filter(a=>a[0]!=='ok'||/folga|limite/.test(a[1])))}
   </div>`,
   bind:()=>bindEditor('edToday',today,()=>{teams={A:null,B:null};render()})},
 {label:'Passo 2 de 5 · Sábado',render:()=>`
