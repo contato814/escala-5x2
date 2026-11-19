@@ -23,7 +23,14 @@ main{max-width:1040px;margin:auto;padding:16px 16px 40px}
 .bar i{display:block;height:100%;background:#f56925;border-radius:99px;transition:width .3s}
 .progress span{font-size:14px;font-weight:700;color:#24406c;white-space:nowrap}
 .lia{display:flex;gap:22px;align-items:center;margin:4px 0 18px}
-.lia img{height:190px;width:auto;flex:none;filter:drop-shadow(0 6px 10px rgba(11,41,84,.18))}
+.lia img{height:190px;width:auto;flex:none;filter:drop-shadow(0 6px 10px rgba(11,41,84,.18));transform-origin:50% 100%;animation:liaIn .6s cubic-bezier(.34,1.56,.64,1) both,liaFloat 3.2s ease-in-out .7s infinite}
+.lia img.p-busto{height:165px}
+.lia .bubble{animation:bubIn .45s ease-out .15s both}
+@keyframes liaIn{0%{opacity:0;transform:translateY(24px) scale(.85) rotate(-4deg)}100%{opacity:1;transform:none}}
+@keyframes liaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes bubIn{0%{opacity:0;transform:translateX(-14px) scale(.97)}100%{opacity:1;transform:none}}
+.lia.still img{animation:liaFloat 3.2s ease-in-out infinite}.lia.still .bubble{animation:none}
+@media (prefers-reduced-motion:reduce){.lia img,.lia .bubble,.lia.still img{animation:none}}
 .bubble{position:relative;flex:1;background:#fff;border:2px solid var(--orange);border-radius:18px;padding:18px 22px;font-size:18.5px;line-height:1.5;box-shadow:0 8px 22px rgba(194,65,12,.14)}
 .bubble::before{content:"";position:absolute;left:-13px;top:50%;margin-top:-12px;border:12px solid transparent;border-left:0;border-right:13px solid var(--orange)}
 .bubble::after{content:"";position:absolute;left:-10px;top:50%;margin-top:-10px;border:10px solid transparent;border-left:0;border-right:11px solid #fff}
@@ -157,7 +164,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
   .brand strong{font-size:18px}.brand span{font-size:13px}.logo{width:48px;height:40px}
   h1{font-size:21px}
   .lia{gap:14px}
-  .lia img{height:120px}
+  .lia img{height:120px}.lia img.p-busto{height:105px}
   .bubble{font-size:15.5px;padding:12px 14px}
   .card{padding:14px}
   .day{grid-template-columns:1fr 1fr;gap:8px}
@@ -214,7 +221,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 </main>
 
 <footer>
-  ADC TEC • Rumo à 5x2 • versão 1.5 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+  ADC TEC • Rumo à 5x2 • versão 1.6 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
 </footer>
 
 <script>
@@ -354,12 +361,15 @@ function bindEditor(id,w,onChange){
 }
 const pills=(w)=>`<div class="sum"><div class="pill"><b>${fmt(total(w))}</b><span>por semana</span></div><div class="pill"><b>${offs(w)}</b><span>${offs(w)===1?'folga':'folgas'} por semana</span></div><div class="pill"><b>${7-offs(w)}</b><span>dias de trabalho</span></div></div>`;
 
-const lia=t=>`<div class="lia"><img src="assets/lia-corpo.png" alt="LIA, assistente da ADC TEC"><div class="bubble"><span class="who">LIA diz</span>${t}</div></div>`;
+// uma pose da LIA para cada passo
+const POSES=['boas-vindas.webp','apontando.webp','maos.png','busto.webp','encostada.webp','boas-vindas.webp'];
+let liaShown=-1; // a entrada animada só acontece quando o passo muda
+const lia=t=>{const f=POSES[step]||POSES[0];return `<div class="lia${liaShown===step?' still':''}"><img class="p-${f.split('.')[0]}" src="assets/lia/lia-${f}" alt="LIA, assistente da ADC TEC"><div class="bubble"><span class="who">LIA diz</span>${t}</div></div>`};
 
 // ---------- passos ----------
 const STEPS=[
 {label:'Começo',render:()=>`
-  ${lia('Olá! Eu sou a <b>LIA</b> e este é o <b>Rumo à 5x2</b>. Vou te ajudar a trocar a escala <b>6x1</b> pela <b>5x2</b>, sem complicação.')}
+  ${lia('Oi! Eu sou a <b>LIA</b>, da ADC TEC. 👋 Em <b>5 passos simples</b>, vamos montar juntos a nova escala <b>5x2</b> da sua empresa, sem precisar entender de lei. Eu te aviso se algo não estiver certo.')}
   <div class="card">
     <h1>O que mudou na lei</h1>
     <ul>
@@ -472,7 +482,7 @@ const STEPS=[
   const r=check(teams.A,lim),rB=sat?check(teams.B,lim):[];
   const late=mStart<D40&&total(teams.A)>40*60;
   return `
-  ${lia('Pronto! Esta é a sua nova escala. Confira os avisos e, se quiser, <b>imprima ou salve em PDF</b>.')}
+  ${lia('Pronto! 🎉 Esta é a sua nova escala. Confira os avisos e, se quiser, <b>imprima</b>, <b>salve em PDF</b> ou <b>baixe em Excel</b> para ajustar depois.')}
   <div class="card">
     <h1>Antes e depois</h1>
     <div class="scroll" style="border:0"><table class="cmp"><thead><tr><th scope="col">Dia</th><th scope="col">Hoje (6x1)</th><th scope="col">${sat?'Nova · Turma A':'Nova escala (5x2)'}</th>${sat?'<th scope="col">Nova · Turma B</th>':''}</tr></thead>
@@ -521,43 +531,92 @@ function zip(files){// files: [[nome, texto]] — zip sem compressão
 }
 const xe=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const colName=n=>{let s='';n++;while(n){const r=(n-1)%26;s=String.fromCharCode(65+r)+s;n=Math.floor((n-1)/26)}return s};
-// rows: lista de linhas; cada célula é texto, ou {v,s} com s = 1 título, 2 cabeçalho, 3 folga, 4 total
-function sheetXML(rows,widths){
-  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews>${widths?`<cols>${widths.map((w,k)=>`<col min="${k+1}" max="${k+1}" width="${w}" customWidth="1"/>`).join('')}</cols>`:''}<sheetData>${rows.map((r,i)=>`<row r="${i+1}">${r.map((c,j)=>{if(c==null||c==='')return '';const o=typeof c==='object'?c:{v:c};return `<c r="${colName(j)}${i+1}" t="inlineStr"${o.s?` s="${o.s}"`:''}><is><t xml:space="preserve">${xe(o.v)}</t></is></c>`}).join('')}</row>`).join('')}</sheetData></worksheet>`;
+// Célula: texto simples, ou objeto {v (texto), f (fórmula), str (fórmula que devolve texto), n (número), s (estilo)}
+// Estilos: 1 título, 2 cabeçalho, 3 folga, 4 total, 5 hora editável, 6 texto editável, 7 horas calculadas,
+// 8 total de horas, 9 número editável, 10 texto com quebra, 11 célula do mês, 12 nota em itálico, 13 nome do bloco
+function cellXML(c,ref){
+  if(c==null||c==='')return '';
+  const o=typeof c==='object'?c:{v:c},s=o.s?` s="${o.s}"`:'';
+  if(o.f!=null)return `<c r="${ref}"${s}${o.str?' t="str"':''}><f>${xe(o.f)}</f></c>`;
+  if(o.n!=null)return `<c r="${ref}"${s}><v>${o.n}</v></c>`;
+  if(o.v==null||o.v==='')return o.s?`<c r="${ref}"${s}/>`:'';
+  return `<c r="${ref}" t="inlineStr"${s}><is><t xml:space="preserve">${xe(o.v)}</t></is></c>`;
 }
-function xlsx(sheets){// sheets: [{name, rows, widths}]
-  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="14"/><color rgb="FF0B2954"/><name val="Calibri"/></font></fonts><fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE5EDFF"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFECEEF2"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF1E6"/></patternFill></fill></fills><borders count="2"><border/><border><left style="thin"><color rgb="FFCFDAEB"/></left><right style="thin"><color rgb="FFCFDAEB"/></right><top style="thin"><color rgb="FFCFDAEB"/></top><bottom style="thin"><color rgb="FFCFDAEB"/></bottom></border></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="5"><xf/><xf fontId="2" applyFont="1"/><xf fontId="1" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf fillId="3" borderId="1" applyFill="1" applyBorder="1"><alignment horizontal="center"/></xf><xf fontId="1" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+function sheetXML(sh){
+  const {rows,widths,extra,freeze}=sh;
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"${sh.first?' tabSelected="1"':''}>${freeze?`<pane xSplit="${freeze[0]}" ySplit="${freeze[1]}" topLeftCell="${colName(freeze[0])}${freeze[1]+1}" activePane="bottomRight" state="frozen"/>`:''}</sheetView></sheetViews>${widths?`<cols>${widths.map((w,k)=>`<col min="${k+1}" max="${k+1}" width="${w}" customWidth="1"/>`).join('')}</cols>`:''}<sheetData>${rows.map((r,i)=>`<row r="${i+1}">${(r||[]).map((c,j)=>cellXML(c,`${colName(j)}${i+1}`)).join('')}</row>`).join('')}</sheetData>${extra||''}<pageMargins left="0.5" right="0.5" top="0.6" bottom="0.6" header="0.3" footer="0.3"/></worksheet>`;
+}
+function xlsx(sheets){// sheets: [{name, rows, widths, extra, freeze}]
+  const B='borderId="1" applyBorder="1"',Y='fillId="5" applyFill="1"';
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="2"><numFmt numFmtId="164" formatCode="hh:mm"/><numFmt numFmtId="165" formatCode="[h]:mm"/></numFmts><fonts count="5"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="14"/><color rgb="FF0B2954"/><name val="Calibri"/></font><font><i/><sz val="10"/><color rgb="FF5C6A82"/><name val="Calibri"/></font><font><b/><sz val="12"/><color rgb="FFC2410C"/><name val="Calibri"/></font></fonts><fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE5EDFF"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFECEEF2"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF1E6"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF7C2"/></patternFill></fill></fills><borders count="2"><border/><border><left style="thin"><color rgb="FFCFDAEB"/></left><right style="thin"><color rgb="FFCFDAEB"/></right><top style="thin"><color rgb="FFCFDAEB"/></top><bottom style="thin"><color rgb="FFCFDAEB"/></bottom></border></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="14"><xf/><xf fontId="2" applyFont="1"/><xf fontId="1" fillId="2" ${B} applyFont="1" applyFill="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf fillId="3" ${B} applyFill="1"><alignment horizontal="center"/></xf><xf fontId="1" fillId="4" ${B} applyFont="1" applyFill="1"/><xf numFmtId="164" ${Y} ${B} applyNumberFormat="1"><alignment horizontal="center"/></xf><xf ${Y} ${B}><alignment horizontal="center"/></xf><xf numFmtId="165" ${B} applyNumberFormat="1"><alignment horizontal="center"/></xf><xf numFmtId="165" fontId="1" fillId="4" ${B} applyNumberFormat="1" applyFont="1" applyFill="1"><alignment horizontal="center"/></xf><xf ${Y} ${B}><alignment horizontal="center"/></xf><xf ${B}><alignment vertical="top" wrapText="1"/></xf><xf ${B}><alignment horizontal="center"/></xf><xf fontId="3" applyFont="1"><alignment wrapText="1" vertical="top"/></xf><xf fontId="4" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles><dxfs count="1"><dxf><font><color rgb="FF5C6A82"/></font><fill><patternFill patternType="solid"><bgColor rgb="FFECEEF2"/></patternFill></fill></dxf></dxfs></styleSheet>`;
   return zip([
     ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((s,k)=>`<Override PartName="/xl/worksheets/sheet${k+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`],
     ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
-    ['xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,k)=>`<sheet name="${xe(s.name)}" sheetId="${k+1}" r:id="rId${k+1}"/>`).join('')}</sheets></workbook>`],
+    ['xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,k)=>`<sheet name="${xe(s.name)}" sheetId="${k+1}" r:id="rId${k+1}"/>`).join('')}</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`],
     ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,k)=>`<Relationship Id="rId${k+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${k+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
     ['xl/styles.xml',styles],
-    ...sheets.map((s,k)=>[`xl/worksheets/sheet${k+1}.xml`,sheetXML(s.rows,s.widths)])
+    ...sheets.map((s,k)=>[`xl/worksheets/sheet${k+1}.xml`,sheetXML({...s,first:k===0})])
   ]);
 }
 function exportExcel(){
-  const [y,m]=monthKey.split('-').map(Number),n=new Date(y,m+1,0).getDate(),mStart=new Date(y,m,1),lim=mStart>=D40?40:42;
-  const H=v=>({v,s:2}),cellH=d=>d.on?`${d.start} às ${d.end}`:{v:'Folga',s:3},cellL=d=>d.on?brkLabel(d.brk):'',cellN=d=>d.on&&ok(d)?fmt(net(d)):'';
-  const cols=[['Hoje (6x1)',today],[sat?'Nova escala · Turma A':'Nova escala (5x2)',teams.A],...(sat?[['Nova escala · Turma B',teams.B]]:[])];
-  const s1=[[{v:'Antes e depois',s:1}],[],[H('Dia'),...cols.flatMap(([t])=>[H(t+' · horário'),H('Almoço'),H('Horas')])],
-    ...ORDER.map(i=>[DN[i],...cols.flatMap(([,w])=>[cellH(w[i]),cellL(w[i]),cellN(w[i])])]),
-    [{v:'Total',s:4},...cols.flatMap(([,w])=>[{v:`${offs(w)} ${offs(w)===1?'folga':'folgas'}`,s:4},{v:'',s:4},{v:fmt(total(w)),s:4}])]];
+  const [y,m]=monthKey.split('-').map(Number),n=new Date(y,m+1,0).getDate(),mStart=new Date(y,m,1);
+  const HS='Horários',Q=`'${HS}'!`,H=v=>({v,s:2}),tm=t=>({n:+(min(t)/1440).toFixed(10),s:5}),bk=b=>({n:+((+b)/1440).toFixed(10),s:5});
+  // ---- aba Horários: um bloco por escala (hoje, nova, turma B); só as células amarelas são para mudar ----
+  const blocks=[['Como é hoje (6x1)',today],[sat?'Nova escala 5x2 · Turma A (folga sábado e domingo)':'Nova escala 5x2',teams.A],...(sat?[['Nova escala 5x2 · Turma B (folga domingo e segunda)',teams.B]]:[])];
+  const rows=[[{v:'Horários da escala',s:1}],
+    [{v:'Mude só as células amarelas: Trabalha ou Folga, entrada, saída e almoço (digite as horas assim: 08:00). As horas do dia, os totais, a aba Conferência e a escala do mês se recalculam sozinhos.',s:12}],
+    ['Limite de horas por semana','',{n:mStart>=D40?40:T,s:9},{v:'42 horas a partir de 16/12/2026; 40 horas a partir de 16/12/2027.',s:12}],[]];
+  const LIM=`${Q}$C$3`,info=[],val=[];
+  blocks.forEach(([title,w])=>{
+    rows.push([{v:title,s:13}]);
+    rows.push([H('Dia'),H('Trabalha ou folga'),H('Entrada'),H('Saída'),H('Almoço'),H('Horas no dia')]);
+    const r0=rows.length+1;
+    ORDER.forEach((i,k)=>{const d=w[i],r=r0+k;
+      rows.push([DN[i],{v:d.on?'Trabalha':'Folga',s:6},d.on?tm(d.start):{s:5},d.on?tm(d.end):{s:5},d.on?bk(d.brk):{s:5},{f:`IF(B${r}="Folga","",MOD(D${r}-C${r},1)-E${r})`,s:7}])});
+    const r1=r0+6,rt=r1+1;
+    rows.push([{v:'Total da semana',s:4},{f:`COUNTIF(B${r0}:B${r1},"Folga")&IF(COUNTIF(B${r0}:B${r1},"Folga")=1," folga"," folgas")`,str:1,s:4},{v:'',s:4},{v:'',s:4},{v:'',s:4},{f:`SUM(F${r0}:F${r1})`,s:8}]);
+    rows.push([]);
+    val.push(`B${r0}:B${r1}`);
+    info.push({title,r0,r1,rt});
+  });
+  const extraH=`<dataValidations count="1"><dataValidation type="list" allowBlank="1" showErrorMessage="1" errorTitle="Valor inválido" error="Escolha Trabalha ou Folga." sqref="${val.join(' ')}"><formula1>"Trabalha,Folga"</formula1></dataValidation></dataValidations>`;
+  // ---- aba Conferência: fórmulas que olham a aba Horários ----
+  const conf=[[{v:'Conferência',s:1}],[{v:'Recalcula sozinha quando você muda a aba Horários.',s:12}],[]];
+  info.forEach(({title,r0,r1,rt})=>{
+    const B=`${Q}$B$${r0}:$B$${r1}`,C=`${Q}$C$${r0}:$C$${r1}`,D=`${Q}$D$${r0}:$D$${r1}`,E=`${Q}$E$${r0}:$E$${r1}`,W=`(${B}="Trabalha")`,NET=`(MOD(${D}-${C},1)-${E})`,eps='0.0001';
+    const nx=k=>r0+((k+1)%7),inter=ORDER.map((_,k)=>`(${Q}$B$${r0+k}="Trabalha")*(${Q}$B$${nx(k)}="Trabalha")*((1-${Q}$D$${r0+k}+${Q}$C$${nx(k)})<11/24-${eps})`).join('+');
+    conf.push([{v:title,s:13}]);
+    conf.push([H('Item'),H('Resultado')]);
+    const it=(t,f)=>conf.push([{v:t,s:10},{f,str:1,s:10}]);
+    it('Horas por semana',`IF(${Q}$F$${rt}*24>${LIM}+${eps},"⚠️ Passa de "&${LIM}&" horas: são "&TEXT(${Q}$F$${rt},"[h]:mm")&" por semana.","✅ Dentro do limite: "&TEXT(${Q}$F$${rt},"[h]:mm")&" por semana (limite de "&${LIM}&" horas).")`);
+    it('Folgas',`IF(COUNTIF(${B},"Folga")<2,"⚠️ Só "&COUNTIF(${B},"Folga")&IF(COUNTIF(${B},"Folga")=1," folga"," folgas")&": a partir de 16/12/2026 são pelo menos 2 por semana.","✅ "&COUNTIF(${B},"Folga")&" folgas por semana.")`);
+    it('Horário completo',`IF(SUMPRODUCT(${W}*(((${C}="")+(${D}="")+(${NET}<=0))>0))>0,"⚠️ Confira entrada e saída: há dia de trabalho sem horário ou com saída antes da entrada.","✅ Todos os dias de trabalho têm entrada e saída.")`);
+    it('Almoço',`IF(SUMPRODUCT(${W}*(${NET}>6/24+${eps})*(${E}<1/24-${eps}))>0,"⚠️ Almoço curto: quem trabalha mais de 6 horas no dia precisa de pelo menos 1 hora de intervalo.",IF(SUMPRODUCT(${W}*(${NET}>4/24+${eps})*(${NET}<=6/24+${eps})*(${E}<15/1440-${eps}))>0,"⚠️ Pausa curta: de 4 a 6 horas de trabalho, a pausa mínima é de 15 minutos.","✅ Intervalos corretos."))`);
+    it('Intervalo acima de 2 horas',`IF(SUMPRODUCT(${W}*(${E}>2/24+${eps}))>0,"⚠️ Há intervalo maior que 2 horas: depende de acordo escrito ou convenção coletiva.","✅ Nenhum intervalo passa de 2 horas.")`);
+    it('Descanso entre um dia e outro',`IF((${inter})>0,"⚠️ Entre a saída de um dia e a entrada do dia seguinte são necessárias pelo menos 11 horas.","✅ Pelo menos 11 horas de descanso entre os dias.")`);
+    it('Dias com mais de 8 horas',`IF(SUMPRODUCT(${W}*(${NET}>8/24+${eps}))>0,"⚠️ "&SUMPRODUCT(${W}*(${NET}>8/24+${eps}))&" dia(s) com mais de 8 horas: exige acordo de compensação de horas ou convenção coletiva. Fale com o seu contador.","✅ Nenhum dia passa de 8 horas.")`);
+    conf.push([]);
+  });
+  conf.push([{v:'Lembretes',s:13}]);
+  ['A redução da jornada não pode diminuir o salário, inclusive pisos (EC 141, art. 2º).','A convenção coletiva da sua categoria pode ter regras próprias. Leve esta escala ao seu contador antes de colocar em prática.','Feriados não aparecem na escala do mês. Confira com o seu contador os feriados nacionais, do estado e da cidade.','Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico.'].forEach(t=>conf.push([{v:t,s:10}]));
+  // ---- aba do mês: cada dia busca o horário na aba Horários ----
   const who=people.map((p,k)=>({name:p.name.trim()||`Pessoa ${k+1}`,team:sat?p.team:'A'}));
-  const s2=[[{v:`Escala de ${MONTHS[m]} de ${y}`,s:1}],[mStart<D42?'Até 15/12/2026 vale o horário de hoje; a partir de 16/12/2026, a nova escala.':'Horário de entrada e saída de cada dia. F = folga.'],
-    [H('Pessoa'),...(sat?[H('Turma')]:[]),...Array.from({length:n},(_,k)=>H(`${pad(k+1)} ${DS[new Date(y,m,k+1).getDay()]}`))],
-    ...who.map(p=>[p.name,...(sat?[`Turma ${p.team}`]:[]),...Array.from({length:n},(_,k)=>{const dt=new Date(y,m,k+1),x=(dt<D42?today:teams[p.team])[dt.getDay()];return x.on?`${x.start}-${x.end}`:{v:'F',s:3}})]),
-    [],['Feriados não aparecem aqui. Confira com o seu contador os feriados do mês (nacionais, do estado e da cidade).']];
-  const al=(r,t)=>r.map(([c,a,b])=>[t||'',c==='ok'?'OK':c==='info'?'Informação':'Atenção',a,b]);
-  const s3=[[{v:'Conferência da nova escala',s:1}],[],[H(sat?'Turma':''),H('Situação'),H('Assunto'),H('Explicação')],
-    ...al(check(teams.A,lim),sat?'Turma A':''),...(sat?al(check(teams.B,lim),'Turma B'):[]),
-    ...al([['info','Salário','A redução da jornada não pode diminuir o salário, inclusive pisos (EC 141, art. 2º).'],['info','Convenção coletiva','A convenção coletiva da sua categoria pode ter regras próprias. Leve esta escala ao seu contador antes de colocar em prática.']]),
-    [],['Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico.']];
-  if(!sat)s3.forEach(r=>{if(r.length===4)r.shift()});
+  const bi={hoje:info[0],A:info[1],B:info[2]||info[1]},c0=sat?2:1;
+  const mrows=[[{v:`Escala de ${MONTHS[m]} de ${y}`,s:1}],
+    [{v:(mStart<D42?'Até 15/12/2026 vale o horário de hoje; a partir de 16/12/2026, a nova escala. ':'')+'Cada dia mostra entrada e saída; F = folga. Para mudar os horários, altere a aba Horários. O nome'+(sat?' e a turma (A ou B)':'')+' podem ser mudados aqui.',s:12}],
+    [H('Pessoa'),...(sat?[H('Turma')]:[]),...Array.from({length:n},(_,k)=>H(`${pad(k+1)} ${DS[new Date(y,m,k+1).getDay()]}`))]];
+  who.forEach((p,pi)=>{const r=4+pi;
+    mrows.push([{v:p.name,s:6},...(sat?[{v:p.team,s:6}]:[]),...Array.from({length:n},(_,k)=>{const dt=new Date(y,m,k+1),off=ORDER.indexOf(dt.getDay());
+      const one=b=>`IF(${Q}$B$${b.r0+off}="Folga","F",TEXT(${Q}$C$${b.r0+off},"hh:mm")&"-"&TEXT(${Q}$D$${b.r0+off},"hh:mm"))`;
+      const f=dt<D42?one(bi.hoje):sat?`IF($B$${r}="B",${one(bi.B)},${one(bi.A)})`:one(bi.A);
+      return {f,str:1,s:11}})]);
+  });
+  const lastCol=colName(c0+n-1),lastRow=3+who.length;
+  const extraM=`<conditionalFormatting sqref="${colName(c0)}4:${lastCol}${lastRow}"><cfRule type="cellIs" dxfId="0" priority="1" operator="equal"><formula>"F"</formula></cfRule></conditionalFormatting>${sat?`<dataValidations count="1"><dataValidation type="list" allowBlank="1" showErrorMessage="1" errorTitle="Turma inválida" error="Escolha A ou B." sqref="B4:B${lastRow}"><formula1>"A,B"</formula1></dataValidation></dataValidations>`:''}`;
   const blob=xlsx([
-    {name:'Antes e depois',rows:s1,widths:[14,...cols.flatMap(()=>[26,16,9])]},
-    {name:`Escala ${MONTHS[m].slice(0,3)} ${y}`,rows:s2,widths:[24,...(sat?[10]:[]),...Array(n).fill(12)]},
-    {name:'Conferência',rows:s3,widths:sat?[10,12,34,90]:[12,34,90]}]);
+    {name:HS,rows,widths:[30,18,11,11,11,14,60],extra:extraH},
+    {name:'Conferência',rows:conf,widths:[30,110]},
+    {name:`Escala ${MONTHS[m].slice(0,3)} ${y}`,rows:mrows,widths:[24,...(sat?[8]:[]),...Array(n).fill(12)],extra:extraM,freeze:[c0,3]}]);
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Escala_5x2_${MONTHS[m]}_${y}.xlsx`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
 }
 
@@ -566,7 +625,7 @@ function exportExcel(){
 (()=>{const now=new Date(),d=now<new Date(2026,11,1)?new Date(2026,11,1):now;monthKey=`${d.getFullYear()}-${d.getMonth()}`})();
 function render(){
   const s=STEPS[step],y=window.scrollY,a=document.activeElement,aid=a&&a.closest('#screen')?(a.dataset.k&&a.dataset.p?`[data-p="${a.dataset.p}"][data-k="${a.dataset.k}"]`:a.id?`#${a.id}`:null):null;
-  $('screen').innerHTML=s.render();
+  $('screen').innerHTML=s.render();liaShown=step;
   if(s.bind)s.bind();
   $('stepLabel').textContent=s.label;
   $('barFill').style.width=Math.round(step/(STEPS.length-1)*100)+'%';
