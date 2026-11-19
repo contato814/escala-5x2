@@ -192,7 +192,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 </main>
 
 <footer>
-  ADC TEC • Da 6x1 para a 5x2 • versão 1.2 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+  ADC TEC • Da 6x1 para a 5x2 • versão 1.3 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
 </footer>
 
 <script>
@@ -307,13 +307,23 @@ function bindEditor(id,w,onChange){
   delete repMsg[id];
   box.querySelectorAll('.day').forEach(row=>{const i=+row.dataset.i,d=w[i];
     row.querySelectorAll('[data-on]').forEach(b=>b.onclick=()=>{d.on=b.dataset.on==='1';lastEdit[id]=i;touched=true;onChange(true)});
-    row.querySelectorAll('[data-k]').forEach(el=>el.onchange=()=>{d[el.dataset.k]=el.dataset.k==='brk'?+el.value:el.value;lastEdit[id]=i;touched=true;onChange(false)});
+    // ao digitar, só atualiza as horas do dia e os totais; a página é redesenhada quando a pessoa sai dos horários
+    row.querySelectorAll('[data-k]').forEach(el=>el.onchange=()=>{d[el.dataset.k]=el.dataset.k==='brk'?+el.value:el.value;lastEdit[id]=i;touched=true;dirty=true;
+      row.querySelector('.net').textContent=ok(d)?fmt(net(d)):'—';
+      const s=document.querySelector('.sum');if(s)s.outerHTML=pills(w);});
     row.querySelectorAll('[data-rep]').forEach(b=>b.onclick=()=>{
       const tgt=b.dataset.rep==='wk'?[1,2,3,4,5].filter(j=>j!==i):ORDER.filter(j=>j!==i&&w[j].on);
       tgt.forEach(j=>{w[j]={...d,on:true}});
       repMsg[id]=`Horário de ${DN[i].toLowerCase()} (${fh(d.start)} às ${fh(d.end)}, ${brkLabel(d.brk).toLowerCase()}${+d.brk?' de almoço':''}) repetido em ${joinE(tgt.map(j=>DN[j].toLowerCase()))}.`;
       lastEdit[id]=i;touched=true;onChange(true);});
   });
+  let dirty=false;
+  box.addEventListener('focusout',e=>{const to=e.relatedTarget;
+    if(!dirty||(to&&box.contains(to)))return;
+    dirty=false;
+    // um botão fora do editor (Próximo, opções, turmas) já redesenha a página ao ser clicado
+    if(to&&to.closest('button'))return;
+    onChange(false)});
 }
 const pills=(w)=>`<div class="sum"><div class="pill"><b>${fmt(total(w))}</b><span>por semana</span></div><div class="pill"><b>${offs(w)}</b><span>${offs(w)===1?'folga':'folgas'} por semana</span></div><div class="pill"><b>${7-offs(w)}</b><span>dias de trabalho</span></div></div>`;
 
