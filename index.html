@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Da 6x1 para a 5x2 | ADC TEC</title>
+<meta name="description" content="Monte, passo a passo, a nova escala 5x2 da sua empresa: como é hoje e como pode ficar.">
+<style>
+:root{--navy:#0b2954;--blue:#10488e;--orange:#c2410c;--bg:#f5f7fc;--line:#dce4f0;--ink:#18294b;--muted:#5c6a82;--soft:#e5edff}
+*{box-sizing:border-box}
+body{font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:var(--blue)}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.topin{max-width:1040px;margin:auto;padding:10px 16px;display:flex;align-items:center;gap:14px}
+.logo{width:64px;height:52px;object-fit:contain}
+.brand strong{display:block;font-size:22px;line-height:1.15;color:#091d46}
+.brand span{font-size:14px;color:var(--muted)}
+main{max-width:1040px;margin:auto;padding:16px 16px 40px}
+.progress{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+.bar{flex:1;height:10px;background:#dfe6f2;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:#f56925;border-radius:99px;transition:width .3s}
+.progress span{font-size:14px;font-weight:700;color:#24406c;white-space:nowrap}
+.lia{display:flex;gap:14px;align-items:flex-end;margin-bottom:14px}
+.lia img{width:88px;height:auto;flex:none}
+.bubble{background:var(--soft);border-radius:16px 16px 16px 4px;padding:14px 18px;font-size:17px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+h1{font-size:25px;line-height:1.2;margin:0 0 8px;color:#0c2550}
+h2{font-size:19px;margin:0 0 10px;color:#132b58}
+h3{font-size:16px;margin:16px 0 8px;color:#132b58}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.tip{background:#fff8ef;border:1px solid #f7d9b8;border-radius:12px;padding:12px 16px;margin:12px 0 0}
+.tip b:first-child{color:var(--orange)}
+/* editor da semana */
+.wk{display:flex;flex-direction:column;gap:8px}
+.day{display:grid;grid-template-columns:96px 150px 1fr 1fr 1fr 92px;gap:10px;align-items:end;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f9fbfe}
+.day.off{background:#f1f3f7}
+.day .dn{font-weight:800;align-self:center}
+.day label{display:flex;flex-direction:column;gap:3px;font-size:13px;font-weight:600;color:#53627b}
+.day input,.day select{padding:9px 10px;border:1px solid #cfdaeb;border-radius:8px;background:#fff;min-height:44px;width:100%;color:var(--ink)}
+.day .net{align-self:center;font-weight:800;text-align:right}
+.day.off .net{color:var(--muted);font-weight:600}
+.day.off .t{visibility:hidden}
+.seg{display:flex;border:1px solid #c4d2e7;border-radius:10px;overflow:hidden;min-height:44px}
+.seg button{flex:1;border:0;background:#fff;color:#15417a;font-weight:700;padding:6px 8px}
+.seg button[aria-pressed=true]{background:var(--blue);color:#fff}
+.sum{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.pill{background:#f1f5fb;border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.pill b{display:block;font-size:22px;color:var(--blue)}
+.pill span{font-size:13px;color:var(--muted)}
+/* alertas */
+.alert{padding:11px 14px;border-radius:10px;margin-top:8px;border:1px solid}
+.alert strong{display:block}
+.alert p{margin:2px 0 0;font-size:15px}
+.alert.ok{background:#eaf9f1;border-color:#c7e7d3}
+.alert.bad{background:#fff0f0;border-color:#f4c4c7}
+.alert.warn{background:#fff9eb;border-color:#f5e0ab}
+.alert.info{background:#f3f6fa;border-color:#dfe5ee}
+/* escolhas grandes */
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{text-align:left;border:2px solid #c4d2e7;background:#fff;border-radius:14px;padding:16px;min-height:44px}
+.choice b{display:block;font-size:18px;color:#0c2550;margin-bottom:4px}
+.choice[aria-pressed=true]{border-color:var(--orange);background:#fff6ef;box-shadow:0 0 0 3px #fbd3b8}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.opt{border:2px solid #d6deea;border-radius:14px;padding:14px;background:#fff;display:flex;flex-direction:column;gap:6px;text-align:left}
+.opt[aria-pressed=true]{border-color:var(--orange);background:#fff6ef;box-shadow:0 0 0 3px #fbd3b8}
+.opt b.t{font-size:17px;color:#0c2550}
+.opt .tot{font-size:24px;font-weight:800;color:var(--blue)}
+.opt .tot small{font-size:13px;font-weight:600;color:var(--muted)}
+.opt ul{margin:0;padding-left:18px;font-size:14px}
+.badge{display:inline-block;font-size:12.5px;font-weight:700;border-radius:99px;padding:2px 9px;margin:2px 4px 0 0}
+.badge.ok{background:#dcf7e8;color:#08713f}.badge.warn{background:#fff1c9;color:#7a5600}.badge.bad{background:#ffe1e3;color:#a1182a}
+.check40{display:flex;gap:10px;align-items:center;margin:0 0 12px;font-weight:600;min-height:44px}
+.check40 input{width:22px;height:22px;accent-color:var(--orange)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.tabs button{border:1px solid #c4d2e7;background:#fff;border-radius:99px;padding:8px 14px;font-weight:700;color:#15417a;min-height:44px}
+.tabs button[aria-selected=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+details.adj{border:1px solid var(--line);border-radius:12px;margin-top:14px;background:#fff}
+details.adj summary{padding:12px 16px;font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+details.adj>div{padding:0 16px 16px}
+/* equipe */
+.ppl{display:flex;flex-direction:column;gap:8px}
+.prow{display:grid;grid-template-columns:1fr 260px 48px;gap:8px;align-items:end}
+.prow label{display:flex;flex-direction:column;gap:3px;font-size:13px;font-weight:600;color:#53627b}
+.prow input,.prow select{padding:9px 10px;border:1px solid #cfdaeb;border-radius:8px;min-height:44px;width:100%}
+.del{min-height:44px;border:1px solid #f0c2c6;background:#fff;color:#a1182a;border-radius:8px;font-weight:800}
+.cover{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+.cover div{text-align:center;background:#f1f5fb;border:1px solid var(--line);border-radius:10px;padding:8px 2px;font-size:13px}
+.cover b{display:block;font-size:20px;color:var(--blue)}
+.cover div.zero{background:#fff0f0;border-color:#f4c4c7}.cover div.zero b{color:#a1182a}
+/* resultado */
+.cmp{width:100%;border-collapse:collapse;font-size:15px}
+.cmp th,.cmp td{padding:9px 8px;border-bottom:1px solid #e7ecf3;text-align:left;vertical-align:top}
+.cmp thead th{background:#f1f4f9;font-size:14px}
+.cmp tfoot td{font-weight:800}
+.cmp .f{color:var(--muted)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;-webkit-overflow-scrolling:touch}
+.cal{border-collapse:collapse;min-width:max-content}
+.cal th{background:var(--navy);color:#fff;font-size:12px;font-weight:600;padding:6px 3px;min-width:40px;line-height:1.2}
+.cal th.sun{background:#943642}
+.cal th.who,.cal td.who{position:sticky;left:0;z-index:1;text-align:left;min-width:120px;max-width:160px;padding:6px 10px}
+.cal td.who{background:#fff;font-weight:600;font-size:14px}
+.cal td.who small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.cal td{border:1px solid #e3e7ee;text-align:center;padding:3px}
+.tag{display:inline-grid;place-items:center;min-width:34px;min-height:32px;border-radius:7px;font-weight:800;font-size:12px}
+.tag.T{background:#dcf7e8;color:#08713f}
+.tag.F{background:#edf1f7;color:#5d6980}
+.tag.old{outline:2px dashed #e2b26b;outline-offset:-2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;margin:10px 0 0;align-items:center}
+.legend span{display:flex;align-items:center;gap:6px}
+.monthsel{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.monthsel select{padding:9px 10px;border:1px solid #cfdaeb;border-radius:8px;min-height:44px}
+.nav{display:flex;gap:10px;align-items:center;margin-top:6px}
+.btn{min-height:48px;padding:10px 22px;border-radius:10px;font-weight:700;border:1px solid var(--blue);background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+.btn.next{background:var(--orange);border-color:var(--orange);margin-left:auto}
+.btn.sec{background:#fff;color:#15417a;border-color:#c4d2e7}
+.btn.small{min-height:44px;padding:8px 14px}
+.btn[hidden]{display:none}
+.err{color:#a1182a;font-weight:700;margin:8px 0 0}
+:focus-visible{outline:3px solid #7aa7ff;outline-offset:2px}
+details.glos{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:22px}
+details.glos summary{padding:14px 18px;font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:center}
+details.glos dl{margin:0;padding:0 18px 14px}
+details.glos dt{font-weight:700;margin-top:10px;color:#0c2550}
+details.glos dd{margin:2px 0 0}
+footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.printonly{display:none}
+@media (max-width:760px){
+  body{font-size:15px}
+  .brand strong{font-size:18px}.brand span{font-size:13px}.logo{width:48px;height:40px}
+  h1{font-size:21px}
+  .lia img{width:62px}
+  .bubble{font-size:15px;padding:12px 14px}
+  .card{padding:14px}
+  .day{grid-template-columns:1fr 1fr;gap:8px}
+  .day .dn{grid-column:1}.day .seg{grid-column:2}
+  .day .net{grid-column:1/-1;text-align:left}
+  .day.off .t{display:none}
+  .day label.t:nth-of-type(3){grid-column:1/-1}
+  .choices{grid-template-columns:1fr}
+  .prow{grid-template-columns:1fr 48px}.prow label.team{grid-column:1/-1;order:3}
+  .cover{grid-template-columns:repeat(4,1fr)}
+  .nav .btn{flex:1;padding:10px 12px}
+}
+@media print{
+  .top,.progress,.nav,.lia,details.glos,.noprint,footer .noprint{display:none!important}
+  body{background:#fff;font-size:12px}
+  .card{border:0;padding:0}
+  .printonly{display:block}
+  .scroll{overflow:visible;border:0}
+  .cal th{background:#ddd!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tag{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin">
+  <img class="logo" src="assets/adc-tec.png" alt="ADC TEC">
+  <div class="brand"><strong>Da 6x1 para a 5x2</strong><span>Monte a nova escala da sua empresa, passo a passo</span></div>
+</div></header>
+
+<main>
+  <div class="progress" aria-hidden="true"><div class="bar"><i id="barFill"></i></div><span id="stepLabel"></span></div>
+  <div id="live" class="sr" aria-live="polite"></div>
+  <section id="screen" tabindex="-1"></section>
+  <p id="err" class="err" role="alert"></p>
+  <nav class="nav" aria-label="Navegação dos passos">
+    <button class="btn sec" id="back" type="button">← Voltar</button>
+    <button class="btn next" id="next" type="button">Próximo →</button>
+  </nav>
+
+  <details class="glos">
+    <summary>📖 Não entendeu uma palavra? Veja o glossário</summary>
+    <dl>
+      <dt>Escala de trabalho</dt><dd>O quadro que mostra quem trabalha em cada dia, em que horário e quem está de folga.</dd>
+      <dt>6x1 e 5x2</dt><dd>6x1: seis dias de trabalho e um de folga por semana. 5x2: cinco dias de trabalho e dois de folga.</dd>
+      <dt>Jornada</dt><dd>O tempo que a pessoa trabalha, sem contar o almoço. Pode ser contado por dia ou por semana.</dd>
+      <dt>Intervalo (almoço)</dt><dd>A pausa no meio do dia. Não conta como hora trabalhada.</dd>
+      <dt>Folga</dt><dd>Dia inteiro sem trabalho. A partir de 16/12/2026 são pelo menos 2 por semana.</dd>
+      <dt>Descanso entre um dia e outro</dt><dd>O tempo entre a saída de um dia e a entrada do dia seguinte: pelo menos 11 horas.</dd>
+      <dt>Turma</dt><dd>Um grupo de pessoas que folga nos mesmos dias. Com duas turmas, a empresa pode abrir no sábado e todos continuam com 2 folgas.</dd>
+      <dt>Acordo de compensação</dt><dd>Acordo, por escrito ou pela convenção coletiva, que permite trabalhar mais de 8 horas em alguns dias para compensar outros. Peça orientação ao seu contador.</dd>
+      <dt>Convenção coletiva</dt><dd>Acordo entre o sindicato dos empregados e o das empresas de uma categoria. Pode ter regras próprias de horário, folgas e feriados.</dd>
+    </dl>
+  </details>
+</main>
+
+<footer>
+  ADC TEC • Da 6x1 para a 5x2 • versão 1.0 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+</footer>
+
+<script>
+(()=>{
+'use strict';
+const DN=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+const DS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const ORDER=[1,2,3,4,5,6,0];
+const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+// EC 141/2026: 42h e 2 folgas a partir de 16/12/2026; 40h a partir de 16/12/2027
+const D42=new Date(2026,11,16), D40=new Date(2027,11,16);
+const BREAKS=[[0,'Sem intervalo'],[15,'15 minutos'],[30,'30 minutos'],[60,'1 hora'],[90,'1 hora e meia'],[120,'2 horas']];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const min=t=>{const m=/^(\d{2}):(\d{2})$/.exec(t||'');return m?+m[1]*60+ +m[2]:NaN};
+const hhmm=m=>`${pad(Math.floor(m/60)%24)}:${pad(m%60)}`;
+const fmt=m=>{m=Math.round(m);const h=Math.floor(m/60),r=m%60;return r?`${h}h${pad(r)}`:`${h}h`};
+const net=d=>d&&d.on?min(d.end)-min(d.start)-(+d.brk):0;
+const ok=d=>!d.on||(Number.isFinite(net(d))&&net(d)>0);
+const total=w=>w.reduce((s,d)=>s+(ok(d)?net(d):0),0);
+const offs=w=>w.filter(d=>!d.on).length;
+const day=(on,start,end,brk)=>({on,start,end,brk});
+const clone=w=>w.map(d=>({...d}));
+// intervalo mínimo da CLT art. 71: acima de 6h, 1h (até 2h); de 4h a 6h, 15 minutos
+const fromNet=(start,n,brk)=>{const b=n>360?(brk>=60&&brk<=120?brk:60):n>240?15:0;return day(true,start,hhmm(min(start)+n+b),b)};
+const brkLabel=b=>(BREAKS.find(x=>x[0]===+b)||[0,`${b} min`])[1];
+
+// ---------- estado ----------
+let step=0, sat=null, T=42, optIdx=0, editTeam='A', monthKey='2026-11';
+let today=[day(false,'08:00','17:00',60),...[1,2,3,4,5].map(()=>day(true,'08:00','17:00',60)),day(true,'08:00','12:00',0)];
+let teams={A:null,B:null};
+let people=[{name:'',team:'A'},{name:'',team:'A'}];
+let touched=false;
+
+// ---------- textos de resumo ----------
+const fh=t=>{const [h,m]=String(t).split(':');return `${+h}h${m==='00'?'':m}`};
+function describe(w){
+  const g=[];ORDER.forEach((i,k)=>{const d=w[i];if(!d.on)return;const key=`das ${fh(d.start)} às ${fh(d.end)}${+d.brk?`, ${brkLabel(d.brk).toLowerCase()} de almoço`:', sem intervalo'}`;const last=g[g.length-1];if(last&&last.key===key&&last.k===k-1){last.to=i;last.k=k;last.n++}else g.push({key,from:i,to:i,k,n:1})});
+  return g.map(x=>`${DN[x.from]}${x.n>1?(x.n>2?' a ':' e ')+DN[x.to].toLowerCase():''} ${x.key}`);
+}
+const offNames=w=>ORDER.filter(i=>!w[i].on).map(i=>DN[i].toLowerCase());
+const joinE=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' e '+a[a.length-1];
+
+// ---------- conferência ----------
+function check(w,lim){
+  const r=[],tot=total(w),o=offs(w);
+  const bad=ORDER.filter(i=>!ok(w[i]));
+  if(bad.length)r.push(['bad','Horário incompleto',`Confira entrada e saída de ${joinE(bad.map(i=>DN[i].toLowerCase()))}: a saída precisa ser depois da entrada.`]);
+  r.push(tot>lim*60?['bad',`Passa de ${lim} horas por semana`,`São ${fmt(tot)} por semana. O limite é ${lim} horas.`]:['ok',`Dentro do limite de ${lim} horas`,`São ${fmt(tot)} de trabalho por semana.`]);
+  r.push(o<2?['bad',o===1?'Só 1 folga por semana':'Nenhuma folga na semana','A partir de 16/12/2026 são pelo menos 2 folgas por semana.']:['ok',`${o} folgas por semana`,`Folga: ${joinE(offNames(w))}.`]);
+  const shortL=[],shortP=[],longB=[],long8=[];
+  ORDER.forEach(i=>{const d=w[i];if(!d.on||!ok(d))return;const n=net(d);
+    if(n>360&&+d.brk<60)shortL.push(i);else if(n>240&&n<=360&&+d.brk<15)shortP.push(i);
+    if(n>360&&+d.brk>120)longB.push(i);
+    if(n>480)long8.push(i)});
+  const dl=a=>joinE(a.map(i=>DN[i].toLowerCase())),DL=a=>{const t=dl(a);return t[0].toUpperCase()+t.slice(1)};
+  if(shortL.length)r.push(['bad','Almoço curto',`${DL(shortL)}: quem trabalha mais de 6 horas no dia precisa de pelo menos 1 hora de intervalo.`]);
+  if(shortP.length)r.push(['bad','Pausa curta',`${DL(shortP)}: de 4 a 6 horas de trabalho, a pausa mínima é de 15 minutos.`]);
+  if(longB.length)r.push(['warn','Intervalo acima de 2 horas',`${DL(longB)}: intervalo maior que 2 horas depende de acordo escrito ou convenção coletiva.`]);
+  if(!shortL.length&&!shortP.length&&ORDER.some(i=>w[i].on))r.push(['ok','Intervalos corretos','O tempo de almoço ou pausa respeita o mínimo em todos os dias.']);
+  const rest=[];ORDER.forEach(i=>{const a=w[i],b=w[(i+1)%7];if(a.on&&b.on&&ok(a)&&ok(b)&&1440-min(a.end)+min(b.start)<660)rest.push(i)});
+  if(rest.length)r.push(['bad','Pouco descanso entre um dia e outro',`Depois de ${dl(rest)}: entre a saída de um dia e a entrada do dia seguinte são necessárias pelo menos 11 horas.`]);
+  if(long8.length)r.push(['warn','Dias com mais de 8 horas',`${DL(long8)}: trabalhar mais de 8 horas no dia exige acordo de compensação de horas ou convenção coletiva. Fale com o seu contador.`]);
+  return r;
+}
+const alertsHTML=r=>r.map(([c,t,p])=>`<div class="alert ${c}"><strong>${c==='ok'?'✅':c==='bad'?'⚠️':c==='warn'?'⚠️':'ℹ️'} ${esc(t)}</strong><p>${esc(p)}</p></div>`).join('');
+
+// ---------- opções de 5x2 ----------
+const POS={A:[1,2,3,4,5],B:[2,3,4,5,6]};
+function buildOptions(lim){
+  const L=lim*60,ref=ORDER.map(i=>today[i]).find(d=>d.on&&ok(d))||day(true,'08:00','17:00',60),start=ref.start,brk=+ref.brk;
+  const list=[];
+  const mk=(title,why,nets,starts,brks)=>{
+    const mkTeam=t=>{const w=[0,1,2,3,4,5,6].map(()=>day(false,start,start,0));for(let k=0;k<5;k++){const n=nets[k];if(!(n>0))return null;const s0=starts?starts[k]:start;const d=fromNet(s0,n,brks?brks[k]:brk);if(min(s0)+n+d.brk>=1440)return null;w[POS[t][k]]=d}return w};
+    const A=mkTeam('A'),B=mkTeam('B');if(!A||!B)return;
+    const sig=JSON.stringify(A);if(list.some(o=>JSON.stringify(o.A)===sig))return;
+    list.push({title,why,A,B});
+  };
+  const wk=[1,2,3,4,5],monFri=wk.every(i=>today[i].on&&ok(today[i])),tot=monFri?wk.reduce((s,i)=>s+net(today[i]),0):0;
+  if(monFri&&tot<=L)mk(sat?'Mesmo horário de hoje, em 5 dias':'Igual a hoje, sem o sábado',sat?'Cada turma trabalha 5 dias com o mesmo horário de hoje de segunda a sexta.':'Segunda a sexta continuam como hoje; só o trabalho do sábado deixa de existir.',wk.map(i=>net(today[i])),wk.map(i=>today[i].start),wk.map(i=>+today[i].brk));
+  const ex=Math.floor(L/5);mk('Mesmo horário todos os dias','As horas da semana divididas igualmente pelos 5 dias.',[ex,ex,ex,ex,ex]);
+  const x=Math.floor((L+60)/5);mk('Último dia mais curto','Os 4 primeiros dias um pouco mais longos e o último dia 1 hora mais curto.',[x,x,x,x,x-60]);
+  const y=Math.floor((L-240)/4);mk('Último dia meio período','Os 4 primeiros dias mais longos e o último dia com 4 horas.',[y,y,y,y,240]);
+  if(monFri&&tot>L){const last=net(today[5])-(tot-L);if(last>=120)mk('Reduz só no último dia','Os outros dias continuam como hoje; o último dia fica mais curto.',[...[1,2,3,4].map(i=>net(today[i])),last],wk.map(i=>today[i].start),wk.map(i=>+today[i].brk))}
+  return list;
+}
+function badges(o){const w=o.A,tot=total(w),n8=ORDER.filter(i=>w[i].on&&net(w[i])>480).length,b=[];
+  b.push(tot<=T*60?['ok',`Até ${T}h por semana`]:['bad',`Acima de ${T}h`]);b.push(['ok','2 folgas']);
+  b.push(n8?['warn',`${n8} dia(s) com mais de 8h: precisa de acordo`]:['ok','Até 8h por dia']);return b}
+function applyOption(){const o=buildOptions(T)[optIdx];if(!o)return;teams={A:clone(o.A),B:clone(o.B)}}
+
+// ---------- editor da semana ----------
+function weekEditor(w,id){
+  return `<div class="wk" id="${id}">${ORDER.map(i=>{const d=w[i];return `<div class="day${d.on?'':' off'}" data-i="${i}">
+    <span class="dn">${DN[i]}</span>
+    <div class="seg" role="group" aria-label="${DN[i]}: trabalha?"><button type="button" data-on="1" aria-pressed="${d.on}">Trabalha</button><button type="button" data-on="0" aria-pressed="${!d.on}">Folga</button></div>
+    <label class="t">Entrada<input type="time" data-k="start" value="${esc(d.start)}" aria-label="Entrada de ${DN[i]}"></label>
+    <label class="t">Saída<input type="time" data-k="end" value="${esc(d.end)}" aria-label="Saída de ${DN[i]}"></label>
+    <label class="t">Almoço<select data-k="brk" aria-label="Almoço de ${DN[i]}">${BREAKS.map(([v,t])=>`<option value="${v}"${+d.brk===v?' selected':''}>${t}</option>`).join('')}${BREAKS.some(b=>b[0]===+d.brk)?'':`<option value="${d.brk}" selected>${d.brk} minutos</option>`}</select></label>
+    <span class="net">${d.on?(ok(d)?fmt(net(d)):'—'):'Folga'}</span></div>`}).join('')}</div>`;
+}
+function bindEditor(id,w,onChange){
+  const box=$(id);if(!box)return;
+  box.querySelectorAll('.day').forEach(row=>{const d=w[+row.dataset.i];
+    row.querySelectorAll('[data-on]').forEach(b=>b.onclick=()=>{d.on=b.dataset.on==='1';touched=true;onChange(true)});
+    row.querySelectorAll('[data-k]').forEach(el=>el.onchange=()=>{d[el.dataset.k]=el.dataset.k==='brk'?+el.value:el.value;touched=true;onChange(false)});
+  });
+}
+const pills=(w)=>`<div class="sum"><div class="pill"><b>${fmt(total(w))}</b><span>por semana</span></div><div class="pill"><b>${offs(w)}</b><span>${offs(w)===1?'folga':'folgas'} por semana</span></div><div class="pill"><b>${7-offs(w)}</b><span>dias de trabalho</span></div></div>`;
+
+const lia=t=>`<div class="lia"><img src="assets/lia.png" alt="LIA, assistente da ADC TEC"><div class="bubble">${t}</div></div>`;
+
+// ---------- passos ----------
+const STEPS=[
+{label:'Começo',render:()=>`
+  ${lia('Olá! Eu sou a <b>LIA</b>. Vou te ajudar a trocar a escala <b>6x1</b> pela <b>5x2</b>, sem complicação.')}
+  <div class="card">
+    <h1>O que mudou na lei</h1>
+    <ul>
+      <li><b>A partir de 16/12/2026:</b> no máximo <b>42 horas por semana</b> e <b>2 folgas por semana</b>. A escala 6x1 (seis dias de trabalho e uma folga) deixa de ser permitida.</li>
+      <li><b>A partir de 16/12/2027:</b> o limite cai para <b>40 horas por semana</b>.</li>
+      <li>A redução das horas <b>não pode diminuir o salário</b>.</li>
+    </ul>
+    <h2>Como funciona aqui</h2>
+    <ol>
+      <li>Você mostra <b>como é hoje</b> o horário da sua equipe.</li>
+      <li>Diz se a empresa vai <b>abrir aos sábados</b>.</li>
+      <li>Escolhe <b>como vai ficar</b> entre opções prontas.</li>
+      <li>Coloca o <b>nome das pessoas</b> (se quiser).</li>
+      <li>Vê a <b>nova escala do mês</b> e pode imprimir ou salvar em PDF.</li>
+    </ol>
+    <div class="tip"><b>Seus dados ficam com você.</b> Nada é enviado para a internet, e tudo some quando você fecha a página.</div>
+  </div>`},
+{label:'Passo 1 de 5 · Como é hoje',render:()=>`
+  ${lia('Mostre como sua equipe trabalha <b>hoje</b>. Já deixei um exemplo comum de 6x1: segunda a sexta das 8h às 17h e sábado de manhã. <b>Troque para o seu horário.</b>')}
+  <div class="card">
+    <h1>Como é a escala hoje?</h1>
+    <p class="muted small">Para cada dia, diga se a equipe trabalha ou folga e o horário.</p>
+    ${weekEditor(today,'edToday')}
+    ${pills(today)}
+    <h3>Como fica a partir de 16/12/2026</h3>
+    ${alertsHTML(check(today,42).filter(a=>a[0]!=='ok'||/folga|limite/.test(a[1])))}
+  </div>`,
+  bind:()=>bindEditor('edToday',today,()=>{teams={A:null,B:null};render()})},
+{label:'Passo 2 de 5 · Sábado',render:()=>`
+  ${lia('Na 5x2 cada pessoa trabalha 5 dias. Se a empresa precisa abrir no sábado, a equipe se divide em <b>duas turmas</b>, que folgam em dias diferentes.')}
+  <div class="card">
+    <h1>A empresa vai abrir aos sábados?</h1>
+    <div class="choices" role="group" aria-label="A empresa vai abrir aos sábados?">
+      <button type="button" class="choice" data-sat="0" aria-pressed="${sat===false}"><b>Não, fecha aos sábados</b>Todos trabalham de segunda a sexta e folgam no sábado e no domingo.</button>
+      <button type="button" class="choice" data-sat="1" aria-pressed="${sat===true}"><b>Sim, abre aos sábados</b>A equipe se divide em duas turmas:<br>• <b>Turma A</b> trabalha de segunda a sexta e folga sábado e domingo.<br>• <b>Turma B</b> trabalha de terça a sábado e folga domingo e segunda.</button>
+    </div>
+    ${sat===true?'<div class="tip"><b>Dica:</b> com duas turmas, a segunda-feira e o sábado ficam com menos gente. No passo 4 você vê quantas pessoas trabalham em cada dia.</div>':''}
+  </div>`,
+  bind:()=>document.querySelectorAll('[data-sat]').forEach(b=>b.onclick=()=>{sat=b.dataset.sat==='1';touched=true;if(!sat)people.forEach(p=>p.team='A');else people.forEach((p,k)=>p.team=k%2?'B':'A');render()}),
+  valid:()=>sat===null?'Escolha uma das duas respostas para continuar.':''},
+{label:'Passo 3 de 5 · Como vai ficar',render:()=>{
+  const opts=buildOptions(T);if(!teams.A){optIdx=Math.min(optIdx,Math.max(0,opts.length-1));applyOption()}
+  const tw=editTeam==='B'&&sat?'B':'A';
+  return `
+  ${lia('Escolha <b>uma opção</b>. Todas têm 5 dias de trabalho e 2 folgas. Depois, se quiser, ajuste os horários.')}
+  <div class="card">
+    <h1>Como vai ficar na 5x2?</h1>
+    <label class="check40"><input type="checkbox" id="t40" ${T===40?'checked':''}> Já quero me adiantar para as 40 horas (obrigatório a partir de 16/12/2027)</label>
+    <p class="muted small">Hoje: ${fmt(total(today))} por semana. As opções abaixo ficam dentro de ${T} horas.${sat?' Os horários valem para as duas turmas: a Turma B faz de terça a sábado o que a Turma A faz de segunda a sexta.':''}</p>
+    <div class="opts" role="group" aria-label="Opções de escala 5x2">${opts.map((o,k)=>`<button type="button" class="opt" data-opt="${k}" aria-pressed="${k===optIdx&&teams.A&&JSON.stringify(teams.A)===JSON.stringify(o.A)}">
+      <b class="t">${esc(o.title)}</b><span class="small muted">${esc(o.why)}</span>
+      <span class="tot">${fmt(total(o.A))}<small> por semana</small></span>
+      <ul>${describe(o.A).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+      <span>${badges(o).map(([c,t])=>`<span class="badge ${c}">${esc(t)}</span>`).join('')}</span></button>`).join('')||'<p>Não foi possível montar opções com o horário de hoje. Volte ao passo 1 e confira os horários.</p>'}</div>
+    <details class="adj"><summary>✏️ Quer ajustar os horários da opção escolhida?</summary><div>
+      ${sat?`<div class="tabs" role="tablist"><button type="button" role="tab" data-team="A" aria-selected="${tw==='A'}">Turma A (folga sáb. e dom.)</button><button type="button" role="tab" data-team="B" aria-selected="${tw==='B'}">Turma B (folga dom. e seg.)</button></div>`:''}
+      ${weekEditor(teams[tw],'edNew')}
+    </div></details>
+    <h3>Conferência da nova escala${sat?` · Turma ${tw}`:''}</h3>
+    ${pills(teams[tw])}
+    ${alertsHTML(check(teams[tw],T))}
+    ${alertsHTML([['info','Salário','A redução da jornada não pode diminuir o salário, inclusive pisos (EC 141, art. 2º).']])}
+  </div>`},
+  bind:()=>{
+    const tw=editTeam==='B'&&sat?'B':'A';
+    const keepOpen=()=>{const d=document.querySelector('details.adj');if(d)d.open=true};
+    $('t40').onchange=e=>{T=e.target.checked?40:42;teams={A:null,B:null};render()};
+    document.querySelectorAll('[data-opt]').forEach(b=>b.onclick=()=>{optIdx=+b.dataset.opt;applyOption();touched=true;render()});
+    document.querySelectorAll('[data-team]').forEach(b=>b.onclick=()=>{editTeam=b.dataset.team;render();keepOpen()});
+    bindEditor('edNew',teams[tw],()=>{render();keepOpen()});
+  },
+  valid:()=>teams.A?'':'Escolha uma opção para continuar.'},
+{label:'Passo 4 de 5 · Quem trabalha',render:()=>{
+  const cov=ORDER.map(i=>people.filter(p=>teams[sat?p.team:'A'][i].on).length);
+  return `
+  ${lia(`Agora coloque o <b>nome</b> de cada pessoa${sat?' e a <b>turma</b> dela':''}. Este passo é opcional: se preferir, clique em <b>Próximo</b>.`)}
+  <div class="card">
+    <h1>Quem trabalha na empresa?</h1>
+    <div class="ppl">${people.map((p,k)=>`<div class="prow">
+      <label>Nome<input data-p="${k}" data-k="name" value="${esc(p.name)}" placeholder="Pessoa ${k+1}" autocomplete="off"></label>
+      ${sat?`<label class="team">Turma<select data-p="${k}" data-k="team"><option value="A"${p.team==='A'?' selected':''}>Turma A — folga sábado e domingo</option><option value="B"${p.team==='B'?' selected':''}>Turma B — folga domingo e segunda</option></select></label>`:'<span></span>'}
+      <button type="button" class="del" data-del="${k}" aria-label="Remover ${esc(p.name||`pessoa ${k+1}`)}" ${people.length<2?'disabled':''}>✕</button></div>`).join('')}</div>
+    <p><button type="button" class="btn sec small" id="addP">+ Adicionar pessoa</button></p>
+    <h3>Quantas pessoas trabalham em cada dia</h3>
+    <div class="cover">${ORDER.map((i,k)=>`<div class="${cov[k]===0&&(i!==0)&&(i!==6||sat)?'zero':''}"><span>${DS[i]}</span><b>${cov[k]}</b></div>`).join('')}</div>
+    ${sat&&cov[5]===0?alertsHTML([['bad','Ninguém no sábado','Coloque pelo menos uma pessoa na Turma B para a empresa abrir no sábado.']]):''}
+  </div>`},
+  bind:()=>{
+    document.querySelectorAll('[data-p]').forEach(el=>{const p=people[+el.dataset.p];
+      if(el.dataset.k==='name')el.oninput=()=>{p.name=el.value;touched=true};
+      else el.onchange=()=>{p.team=el.value;render()}});
+    document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{people.splice(+b.dataset.del,1);render()});
+    $('addP').onclick=()=>{people.push({name:'',team:sat&&people.filter(p=>p.team==='B').length<people.filter(p=>p.team==='A').length?'B':'A'});render();const ins=document.querySelectorAll('[data-k=name]');ins[ins.length-1].focus()};
+  }},
+{label:'Passo 5 de 5 · A nova escala',render:()=>{
+  const [y,m]=monthKey.split('-').map(Number),n=new Date(y,m+1,0).getDate(),mStart=new Date(y,m,1),mEnd=new Date(y,m,n);
+  const lim=mStart>=D40?40:42;
+  const crosses=mStart<D42&&mEnd>=D42;
+  const who=people.map((p,k)=>({name:p.name.trim()||`Pessoa ${k+1}`,team:sat?p.team:'A'}));
+  const months=[];for(let k=0;k<14;k++){const d=new Date(2026,10+k,1);months.push(`${d.getFullYear()}-${d.getMonth()}`)}
+  let cal='<div class="scroll"><table class="cal"><caption class="sr">Escala do mês</caption><thead><tr><th class="who" scope="col">Pessoa</th>';
+  for(let d=1;d<=n;d++){const dw=new Date(y,m,d).getDay();cal+=`<th scope="col" class="${dw===0?'sun':''}">${pad(d)}<br>${DS[dw]}</th>`}
+  cal+='</tr></thead><tbody>';
+  for(const p of who){cal+=`<tr><td class="who">${esc(p.name)}${sat?`<small>Turma ${p.team}</small>`:''}</td>`;
+    for(let d=1;d<=n;d++){const dt=new Date(y,m,d),dw=dt.getDay(),old=dt<D42,w=old?today:teams[p.team],x=w[dw];
+      cal+=`<td>${x.on?`<span class="tag T${old?' old':''}" title="${DN[dw]} ${pad(d)}: ${x.start} às ${x.end}${old?' (horário de hoje)':''}">${x.start.slice(0,2)}h</span>`:`<span class="tag F${old?' old':''}" title="Folga${old?' (horário de hoje)':''}">F</span>`}</td>`}
+    cal+='</tr>'}
+  cal+='</tbody></table></div>';
+  const cmpRows=ORDER.map(i=>{const cell=w=>w[i].on?`${w[i].start} às ${w[i].end}${+w[i].brk?` <span class="f">(${brkLabel(w[i].brk).toLowerCase()} de almoço)</span>`:''}`:'<span class="f">Folga</span>';return `<tr><th scope="row">${DN[i]}</th><td>${cell(today)}</td><td>${cell(teams.A)}</td>${sat?`<td>${cell(teams.B)}</td>`:''}</tr>`}).join('');
+  const r=check(teams.A,lim),rB=sat?check(teams.B,lim):[];
+  const late=mStart<D40&&total(teams.A)>40*60;
+  return `
+  ${lia('Pronto! Esta é a sua nova escala. Confira os avisos e, se quiser, <b>imprima ou salve em PDF</b>.')}
+  <div class="card">
+    <h1>Antes e depois</h1>
+    <div class="scroll" style="border:0"><table class="cmp"><thead><tr><th scope="col">Dia</th><th scope="col">Hoje (6x1)</th><th scope="col">${sat?'Nova · Turma A':'Nova escala (5x2)'}</th>${sat?'<th scope="col">Nova · Turma B</th>':''}</tr></thead>
+    <tbody>${cmpRows}</tbody>
+    <tfoot><tr><td>Total</td><td>${fmt(total(today))} · ${offs(today)} folga(s)</td><td>${fmt(total(teams.A))} · ${offs(teams.A)} folgas</td>${sat?`<td>${fmt(total(teams.B))} · ${offs(teams.B)} folgas</td>`:''}</tr></tfoot></table></div>
+  </div>
+  <div class="card">
+    <h2>Escala do mês</h2>
+    <div class="monthsel noprint"><label for="mSel"><b>Mês:</b></label><select id="mSel">${months.map(k=>{const [yy,mm]=k.split('-').map(Number);return `<option value="${k}"${k===monthKey?' selected':''}>${MONTHS[mm]} de ${yy}</option>`}).join('')}</select></div>
+    <p class="printonly"><b>${MONTHS[m]} de ${y}</b></p>
+    ${crosses?'<div class="tip" style="margin:0 0 10px"><b>Mês da mudança.</b> Até 15/12 vale o horário de hoje (dias com contorno tracejado). A partir de 16/12, a nova escala.</div>':''}
+    ${mEnd<D42?'<div class="tip" style="margin:0 0 10px"><b>Antes da mudança.</b> Neste mês ainda vale o horário de hoje. A nova escala começa em 16/12/2026.</div>':''}
+    ${cal}
+    <div class="legend"><span><span class="tag T">08h</span> Trabalha (hora de entrada)</span><span><span class="tag F">F</span> Folga</span>${mStart<D42?'<span><span class="tag T old">08h</span> Horário de hoje</span>':''}</div>
+    <p class="small muted">Feriados não aparecem aqui. Confira com o seu contador os feriados do mês (nacionais, do estado e da cidade).</p>
+  </div>
+  <div class="card">
+    <h2>Conferência</h2>
+    ${sat?'<h3>Turma A</h3>':''}${alertsHTML(r)}
+    ${sat?'<h3>Turma B</h3>'+alertsHTML(rB):''}
+    ${late?alertsHTML([['warn','Prepare-se para 2027',`A nova escala tem ${fmt(total(teams.A))} por semana. A partir de 16/12/2027 o limite cai para 40 horas.`]]):''}
+    ${alertsHTML([['info','Salário','A redução da jornada não pode diminuir o salário, inclusive pisos (EC 141, art. 2º).'],['info','Convenção coletiva','A convenção coletiva da sua categoria pode ter regras próprias. Leve esta escala ao seu contador antes de colocar em prática.']])}
+    <div class="nav noprint" style="margin-top:14px;flex-wrap:wrap"><button type="button" class="btn" id="print">🖨 Imprimir ou salvar em PDF</button><button type="button" class="btn sec" id="restart">↺ Começar de novo</button></div>
+  </div>`},
+  bind:()=>{
+    $('mSel').onchange=e=>{monthKey=e.target.value;render()};
+    $('print').onclick=()=>window.print();
+    $('restart').onclick=()=>{if(!confirm('Apagar tudo e começar de novo?'))return;location.reload()};
+  }}
+];
+
+// ---------- navegação ----------
+// mês inicial: dezembro de 2026 (mês da mudança) ou o mês atual, se for depois
+(()=>{const now=new Date(),d=now<new Date(2026,11,1)?new Date(2026,11,1):now;monthKey=`${d.getFullYear()}-${d.getMonth()}`})();
+function render(){
+  const s=STEPS[step],y=window.scrollY,a=document.activeElement,aid=a&&a.closest('#screen')?(a.dataset.k&&a.dataset.p?`[data-p="${a.dataset.p}"][data-k="${a.dataset.k}"]`:a.id?`#${a.id}`:null):null;
+  $('screen').innerHTML=s.render();
+  if(s.bind)s.bind();
+  $('stepLabel').textContent=s.label;
+  $('barFill').style.width=Math.round(step/(STEPS.length-1)*100)+'%';
+  $('back').hidden=step===0;
+  $('next').hidden=step===STEPS.length-1;
+  $('next').textContent=step===0?'Começar →':step===STEPS.length-2?'Ver a nova escala →':'Próximo →';
+  $('err').textContent='';
+  window.scrollTo(0,y);
+  if(aid){const el=document.querySelector(aid);if(el)el.focus({preventScroll:true})}
+}
+function go(n){
+  if(n>step){const v=STEPS[step].valid&&STEPS[step].valid();if(v){$('err').textContent=v;return}}
+  step=Math.max(0,Math.min(STEPS.length-1,n));render();
+  $('live').textContent=STEPS[step].label;
+  $('screen').focus({preventScroll:true});window.scrollTo({top:0,behavior:'smooth'});
+}
+$('next').onclick=()=>go(step+1);
+$('back').onclick=()=>go(step-1);
+window.addEventListener('beforeunload',e=>{if(touched){e.preventDefault();e.returnValue=''}});
+render();
+})();
+</script>
+</body>
+</html>
