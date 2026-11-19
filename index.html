@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Da 6x1 para a 5x2 | ADC TEC</title>
+<title>Rumo à 5x2 | ADC TEC</title>
 <meta name="description" content="Monte, passo a passo, a nova escala 5x2 da sua empresa: como é hoje e como pode ficar.">
 <style>
 :root{--navy:#0b2954;--blue:#10488e;--orange:#c2410c;--bg:#f5f7fc;--line:#dce4f0;--ink:#18294b;--muted:#5c6a82;--soft:#e5edff}
@@ -22,9 +22,12 @@ main{max-width:1040px;margin:auto;padding:16px 16px 40px}
 .bar{flex:1;height:10px;background:#dfe6f2;border-radius:99px;overflow:hidden}
 .bar i{display:block;height:100%;background:#f56925;border-radius:99px;transition:width .3s}
 .progress span{font-size:14px;font-weight:700;color:#24406c;white-space:nowrap}
-.lia{display:flex;gap:14px;align-items:flex-end;margin-bottom:14px}
-.lia img{width:88px;height:auto;flex:none}
-.bubble{background:var(--soft);border-radius:16px 16px 16px 4px;padding:14px 18px;font-size:17px}
+.lia{display:flex;gap:22px;align-items:center;margin:4px 0 18px}
+.lia img{height:190px;width:auto;flex:none;filter:drop-shadow(0 6px 10px rgba(11,41,84,.18))}
+.bubble{position:relative;flex:1;background:#fff;border:2px solid var(--orange);border-radius:18px;padding:18px 22px;font-size:18.5px;line-height:1.5;box-shadow:0 8px 22px rgba(194,65,12,.14)}
+.bubble::before{content:"";position:absolute;left:-13px;top:50%;margin-top:-12px;border:12px solid transparent;border-left:0;border-right:13px solid var(--orange)}
+.bubble::after{content:"";position:absolute;left:-10px;top:50%;margin-top:-10px;border:10px solid transparent;border-left:0;border-right:11px solid #fff}
+.bubble .who{display:block;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
 h1{font-size:25px;line-height:1.2;margin:0 0 8px;color:#0c2550}
 h2{font-size:19px;margin:0 0 10px;color:#132b58}
@@ -153,8 +156,9 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
   body{font-size:15px}
   .brand strong{font-size:18px}.brand span{font-size:13px}.logo{width:48px;height:40px}
   h1{font-size:21px}
-  .lia img{width:62px}
-  .bubble{font-size:15px;padding:12px 14px}
+  .lia{gap:14px}
+  .lia img{height:120px}
+  .bubble{font-size:15.5px;padding:12px 14px}
   .card{padding:14px}
   .day{grid-template-columns:1fr 1fr;gap:8px}
   .day .dn{grid-column:1}.day .seg{grid-column:2}
@@ -180,7 +184,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 <body>
 <header class="top"><div class="topin">
   <img class="logo" src="assets/adc-tec.png" alt="ADC TEC">
-  <div class="brand"><strong>Da 6x1 para a 5x2</strong><span>Monte a nova escala da sua empresa, passo a passo</span></div>
+  <div class="brand"><strong>Rumo à 5x2</strong><span>Monte a nova escala da sua empresa, passo a passo</span></div>
 </div></header>
 
 <main>
@@ -210,7 +214,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 </main>
 
 <footer>
-  ADC TEC • Da 6x1 para a 5x2 • versão 1.4 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+  ADC TEC • Rumo à 5x2 • versão 1.5 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
 </footer>
 
 <script>
@@ -350,12 +354,12 @@ function bindEditor(id,w,onChange){
 }
 const pills=(w)=>`<div class="sum"><div class="pill"><b>${fmt(total(w))}</b><span>por semana</span></div><div class="pill"><b>${offs(w)}</b><span>${offs(w)===1?'folga':'folgas'} por semana</span></div><div class="pill"><b>${7-offs(w)}</b><span>dias de trabalho</span></div></div>`;
 
-const lia=t=>`<div class="lia"><img src="assets/lia.png" alt="LIA, assistente da ADC TEC"><div class="bubble">${t}</div></div>`;
+const lia=t=>`<div class="lia"><img src="assets/lia-corpo.png" alt="LIA, assistente da ADC TEC"><div class="bubble"><span class="who">LIA diz</span>${t}</div></div>`;
 
 // ---------- passos ----------
 const STEPS=[
 {label:'Começo',render:()=>`
-  ${lia('Olá! Eu sou a <b>LIA</b>. Vou te ajudar a trocar a escala <b>6x1</b> pela <b>5x2</b>, sem complicação.')}
+  ${lia('Olá! Eu sou a <b>LIA</b> e este é o <b>Rumo à 5x2</b>. Vou te ajudar a trocar a escala <b>6x1</b> pela <b>5x2</b>, sem complicação.')}
   <div class="card">
     <h1>O que mudou na lei</h1>
     <ul>
@@ -491,14 +495,71 @@ const STEPS=[
     ${sat?'<h3>Turma B</h3>'+alertsHTML(rB):''}
     ${late?alertsHTML([['warn','Prepare-se para 2027',`A nova escala tem ${fmt(total(teams.A))} por semana. A partir de 16/12/2027 o limite cai para 40 horas.`]]):''}
     ${alertsHTML([['info','Salário','A redução da jornada não pode diminuir o salário, inclusive pisos (EC 141, art. 2º).'],['info','Convenção coletiva','A convenção coletiva da sua categoria pode ter regras próprias. Leve esta escala ao seu contador antes de colocar em prática.']])}
-    <div class="nav noprint" style="margin-top:14px;flex-wrap:wrap"><button type="button" class="btn" id="print">🖨 Imprimir ou salvar em PDF</button><button type="button" class="btn sec" id="restart">↺ Começar de novo</button></div>
+    <div class="nav noprint" style="margin-top:14px;flex-wrap:wrap"><button type="button" class="btn" id="print">🖨 Imprimir ou salvar em PDF</button><button type="button" class="btn" id="xls">📊 Baixar em Excel</button><button type="button" class="btn sec" id="restart">↺ Começar de novo</button></div>
   </div>`},
   bind:()=>{
     $('mSel').onchange=e=>{monthKey=e.target.value;render()};
     $('print').onclick=()=>window.print();
+    $('xls').onclick=exportExcel;
     $('restart').onclick=()=>{if(!confirm('Apagar tudo e começar de novo?'))return;location.reload()};
   }}
 ];
+
+// ---------- Excel (.xlsx gerado aqui mesmo, sem enviar nada) ----------
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0};
+function zip(files){// files: [[nome, texto]] — zip sem compressão
+  const enc=new TextEncoder(),parts=[],central=[];let off=0;
+  const u16=v=>[v&255,(v>>8)&255],u32=v=>[v&255,(v>>8)&255,(v>>16)&255,(v>>>24)&255];
+  for(const [name,text] of files){const nb=enc.encode(name),data=enc.encode(text),c=crc32(data);
+    const head=[...u32(0x04034b50),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(c),...u32(data.length),...u32(data.length),...u16(nb.length),...u16(0)];
+    parts.push(new Uint8Array(head),nb,data);
+    central.push(new Uint8Array([...u32(0x02014b50),...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(c),...u32(data.length),...u32(data.length),...u16(nb.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),nb);
+    off+=head.length+nb.length+data.length}
+  const cs=central.reduce((s,p)=>s+p.length,0);
+  return new Blob([...parts,...central,new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cs),...u32(off),...u16(0)])],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+const xe=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const colName=n=>{let s='';n++;while(n){const r=(n-1)%26;s=String.fromCharCode(65+r)+s;n=Math.floor((n-1)/26)}return s};
+// rows: lista de linhas; cada célula é texto, ou {v,s} com s = 1 título, 2 cabeçalho, 3 folga, 4 total
+function sheetXML(rows,widths){
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews>${widths?`<cols>${widths.map((w,k)=>`<col min="${k+1}" max="${k+1}" width="${w}" customWidth="1"/>`).join('')}</cols>`:''}<sheetData>${rows.map((r,i)=>`<row r="${i+1}">${r.map((c,j)=>{if(c==null||c==='')return '';const o=typeof c==='object'?c:{v:c};return `<c r="${colName(j)}${i+1}" t="inlineStr"${o.s?` s="${o.s}"`:''}><is><t xml:space="preserve">${xe(o.v)}</t></is></c>`}).join('')}</row>`).join('')}</sheetData></worksheet>`;
+}
+function xlsx(sheets){// sheets: [{name, rows, widths}]
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="14"/><color rgb="FF0B2954"/><name val="Calibri"/></font></fonts><fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE5EDFF"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFECEEF2"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF1E6"/></patternFill></fill></fills><borders count="2"><border/><border><left style="thin"><color rgb="FFCFDAEB"/></left><right style="thin"><color rgb="FFCFDAEB"/></right><top style="thin"><color rgb="FFCFDAEB"/></top><bottom style="thin"><color rgb="FFCFDAEB"/></bottom></border></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="5"><xf/><xf fontId="2" applyFont="1"/><xf fontId="1" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf fillId="3" borderId="1" applyFill="1" applyBorder="1"><alignment horizontal="center"/></xf><xf fontId="1" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  return zip([
+    ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((s,k)=>`<Override PartName="/xl/worksheets/sheet${k+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`],
+    ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ['xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,k)=>`<sheet name="${xe(s.name)}" sheetId="${k+1}" r:id="rId${k+1}"/>`).join('')}</sheets></workbook>`],
+    ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,k)=>`<Relationship Id="rId${k+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${k+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
+    ['xl/styles.xml',styles],
+    ...sheets.map((s,k)=>[`xl/worksheets/sheet${k+1}.xml`,sheetXML(s.rows,s.widths)])
+  ]);
+}
+function exportExcel(){
+  const [y,m]=monthKey.split('-').map(Number),n=new Date(y,m+1,0).getDate(),mStart=new Date(y,m,1),lim=mStart>=D40?40:42;
+  const H=v=>({v,s:2}),cellH=d=>d.on?`${d.start} às ${d.end}`:{v:'Folga',s:3},cellL=d=>d.on?brkLabel(d.brk):'',cellN=d=>d.on&&ok(d)?fmt(net(d)):'';
+  const cols=[['Hoje (6x1)',today],[sat?'Nova escala · Turma A':'Nova escala (5x2)',teams.A],...(sat?[['Nova escala · Turma B',teams.B]]:[])];
+  const s1=[[{v:'Antes e depois',s:1}],[],[H('Dia'),...cols.flatMap(([t])=>[H(t+' · horário'),H('Almoço'),H('Horas')])],
+    ...ORDER.map(i=>[DN[i],...cols.flatMap(([,w])=>[cellH(w[i]),cellL(w[i]),cellN(w[i])])]),
+    [{v:'Total',s:4},...cols.flatMap(([,w])=>[{v:`${offs(w)} ${offs(w)===1?'folga':'folgas'}`,s:4},{v:'',s:4},{v:fmt(total(w)),s:4}])]];
+  const who=people.map((p,k)=>({name:p.name.trim()||`Pessoa ${k+1}`,team:sat?p.team:'A'}));
+  const s2=[[{v:`Escala de ${MONTHS[m]} de ${y}`,s:1}],[mStart<D42?'Até 15/12/2026 vale o horário de hoje; a partir de 16/12/2026, a nova escala.':'Horário de entrada e saída de cada dia. F = folga.'],
+    [H('Pessoa'),...(sat?[H('Turma')]:[]),...Array.from({length:n},(_,k)=>H(`${pad(k+1)} ${DS[new Date(y,m,k+1).getDay()]}`))],
+    ...who.map(p=>[p.name,...(sat?[`Turma ${p.team}`]:[]),...Array.from({length:n},(_,k)=>{const dt=new Date(y,m,k+1),x=(dt<D42?today:teams[p.team])[dt.getDay()];return x.on?`${x.start}-${x.end}`:{v:'F',s:3}})]),
+    [],['Feriados não aparecem aqui. Confira com o seu contador os feriados do mês (nacionais, do estado e da cidade).']];
+  const al=(r,t)=>r.map(([c,a,b])=>[t||'',c==='ok'?'OK':c==='info'?'Informação':'Atenção',a,b]);
+  const s3=[[{v:'Conferência da nova escala',s:1}],[],[H(sat?'Turma':''),H('Situação'),H('Assunto'),H('Explicação')],
+    ...al(check(teams.A,lim),sat?'Turma A':''),...(sat?al(check(teams.B,lim),'Turma B'):[]),
+    ...al([['info','Salário','A redução da jornada não pode diminuir o salário, inclusive pisos (EC 141, art. 2º).'],['info','Convenção coletiva','A convenção coletiva da sua categoria pode ter regras próprias. Leve esta escala ao seu contador antes de colocar em prática.']]),
+    [],['Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico.']];
+  if(!sat)s3.forEach(r=>{if(r.length===4)r.shift()});
+  const blob=xlsx([
+    {name:'Antes e depois',rows:s1,widths:[14,...cols.flatMap(()=>[26,16,9])]},
+    {name:`Escala ${MONTHS[m].slice(0,3)} ${y}`,rows:s2,widths:[24,...(sat?[10]:[]),...Array(n).fill(12)]},
+    {name:'Conferência',rows:s3,widths:sat?[10,12,34,90]:[12,34,90]}]);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Escala_5x2_${MONTHS[m]}_${y}.xlsx`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
 
 // ---------- navegação ----------
 // mês inicial: dezembro de 2026 (mês da mudança) ou o mês atual, se for depois
