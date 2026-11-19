@@ -66,13 +66,27 @@ h3{font-size:16px;margin:16px 0 8px;color:#132b58}
 .choice{text-align:left;border:2px solid #c4d2e7;background:#fff;border-radius:14px;padding:16px;min-height:44px}
 .choice b{display:block;font-size:18px;color:#0c2550;margin-bottom:4px}
 .choice[aria-pressed=true]{border-color:var(--orange);background:#fff6ef;box-shadow:0 0 0 3px #fbd3b8}
-.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.opt{border:2px solid #d6deea;border-radius:14px;padding:14px;background:#fff;display:flex;flex-direction:column;gap:6px;text-align:left}
-.opt[aria-pressed=true]{border-color:var(--orange);background:#fff6ef;box-shadow:0 0 0 3px #fbd3b8}
-.opt b.t{font-size:17px;color:#0c2550}
-.opt .tot{font-size:24px;font-weight:800;color:var(--blue)}
-.opt .tot small{font-size:13px;font-weight:600;color:var(--muted)}
-.opt ul{margin:0;padding-left:18px;font-size:14px}
+.opts{display:flex;flex-direction:column;gap:14px}
+.opt{border:2px solid #d6deea;border-radius:14px;padding:14px 16px;background:#fff;cursor:pointer}
+.opt.sel{border-color:var(--orange);background:#fff8f2;box-shadow:0 0 0 3px #fbd3b8}
+.opt-h{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}
+.opt-h h3{margin:0;font-size:18px;color:#0c2550}
+.opt-h h3 small{display:block;font-size:13px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.04em}
+.opt-why{margin:4px 0 10px;color:var(--muted);font-size:14.5px}
+.opt .pick{min-height:44px;padding:8px 16px;border-radius:10px;border:2px solid var(--blue);background:#fff;color:var(--blue);font-weight:800}
+.opt.sel .pick{background:var(--orange);border-color:var(--orange);color:#fff}
+.wkv{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wkv div{border:1px solid #cfdaeb;border-radius:10px;background:#eef4ff;padding:8px 6px;text-align:center;font-size:14px;line-height:1.35}
+.wkv div b{display:block;font-size:13px;text-transform:uppercase;color:#0c2550;letter-spacing:.03em}
+.wkv div .hr{display:block;font-weight:800;color:#0c2550;font-size:15px}
+.wkv div .lu{display:block;color:var(--muted);font-size:12.5px}
+.wkv div .nt{display:inline-block;margin-top:4px;font-weight:800;color:var(--blue);background:#fff;border-radius:99px;padding:0 8px}
+.wkv div.long .nt{background:#fff1c9;color:#7a5600}
+.wkv div.f{background:#eceef2;border-style:dashed;color:var(--muted)}
+.wkv div.f .hr{color:var(--muted);font-weight:700}
+.opt-f{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:10px;font-size:14.5px}
+.opt-f .tt{font-weight:800;color:var(--blue);font-size:16px}
+.opt-f .w{color:#7a5600}
 .badge{display:inline-block;font-size:12.5px;font-weight:700;border-radius:99px;padding:2px 9px;margin:2px 4px 0 0}
 .badge.ok{background:#dcf7e8;color:#08713f}.badge.warn{background:#fff1c9;color:#7a5600}.badge.bad{background:#ffe1e3;color:#a1182a}
 .check40{display:flex;gap:10px;align-items:center;margin:0 0 12px;font-weight:600;min-height:44px}
@@ -132,6 +146,10 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .printonly{display:none}
 @media (max-width:760px){
+  .wkv{grid-template-columns:1fr}
+  .wkv div{display:grid;grid-template-columns:64px 1fr auto;align-items:center;text-align:left;gap:6px;padding:7px 10px}
+  .wkv div .nt{margin:0}
+  .opt .pick{width:100%}
   body{font-size:15px}
   .brand strong{font-size:18px}.brand span{font-size:13px}.logo{width:48px;height:40px}
   h1{font-size:21px}
@@ -192,7 +210,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;font-size:13px;color:var
 </main>
 
 <footer>
-  ADC TEC • Da 6x1 para a 5x2 • versão 1.3 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
+  ADC TEC • Da 6x1 para a 5x2 • versão 1.4 • Os dados ficam só neste navegador: nada é enviado e tudo some ao fechar a página. Análise orientativa, baseada na EC 141/2026 e na CLT; não é parecer jurídico. Confira também a convenção coletiva da sua categoria e os feriados com o seu contador.
 </footer>
 
 <script>
@@ -284,6 +302,11 @@ function buildOptions(lim){
 function badges(o){const w=o.A,tot=total(w),n8=ORDER.filter(i=>w[i].on&&net(w[i])>480).length,b=[];
   b.push(tot<=T*60?['ok',`Até ${T}h por semana`]:['bad',`Acima de ${T}h`]);b.push(['ok','2 folgas']);
   b.push(n8?['warn',`${n8} dia(s) com mais de 8h: precisa de acordo`]:['ok','Até 8h por dia']);return b}
+// semana desenhada dia a dia (segunda a domingo)
+const lunch=b=>+b===0?'sem intervalo':+b<60?`pausa de ${+b} min`:`almoço de ${fmt(+b)}`;
+const weekView=w=>ORDER.map(i=>{const d=w[i];
+  return d.on?`<div class="${net(d)>480?'long':''}"><b>${DS[i]}</b><span><span class="hr">${fh(d.start)} às ${fh(d.end)}</span><span class="lu">${lunch(d.brk)}</span></span><span class="nt">${fmt(net(d))}</span></div>`
+    :`<div class="f"><b>${DS[i]}</b><span class="hr">Folga</span><span></span></div>`}).join('');
 function applyOption(){const o=buildOptions(T)[optIdx];if(!o)return;teams={A:clone(o.A),B:clone(o.B)}}
 
 // ---------- editor da semana ----------
@@ -380,11 +403,13 @@ const STEPS=[
     <h1>Como vai ficar na 5x2?</h1>
     <label class="check40"><input type="checkbox" id="t40" ${T===40?'checked':''}> Já quero me adiantar para as 40 horas (obrigatório a partir de 16/12/2027)</label>
     <p class="muted small">Hoje: ${fmt(total(today))} por semana. As opções abaixo ficam dentro de ${T} horas.${sat?' Os horários valem para as duas turmas: a Turma B faz de terça a sábado o que a Turma A faz de segunda a sexta.':''}</p>
-    <div class="opts" role="group" aria-label="Opções de escala 5x2">${opts.map((o,k)=>`<button type="button" class="opt" data-opt="${k}" aria-pressed="${k===optIdx&&teams.A&&JSON.stringify(teams.A)===JSON.stringify(o.A)}">
-      <b class="t">${esc(o.title)}</b><span class="small muted">${esc(o.why)}</span>
-      <span class="tot">${fmt(total(o.A))}<small> por semana</small></span>
-      <ul>${describe(o.A).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
-      <span>${badges(o).map(([c,t])=>`<span class="badge ${c}">${esc(t)}</span>`).join('')}</span></button>`).join('')||'<p>Não foi possível montar opções com o horário de hoje. Volte ao passo 1 e confira os horários.</p>'}</div>
+    <div class="opts" role="group" aria-label="Opções de escala 5x2">${opts.map((o,k)=>{const sel=k===optIdx&&teams.A&&JSON.stringify(teams.A)===JSON.stringify(o.A),n8=ORDER.filter(i=>o.A[i].on&&net(o.A[i])>480).length;
+      return `<div class="opt${sel?' sel':''}" data-opt="${k}">
+      <div class="opt-h"><h3><small>Opção ${k+1}</small>${esc(o.title)}</h3><button type="button" class="pick" aria-pressed="${!!sel}">${sel?'✔ Opção escolhida':'Escolher esta opção'}</button></div>
+      <p class="opt-why">${esc(o.why)}</p>
+      <div class="wkv">${weekView(o.A)}</div>
+      <div class="opt-f"><span class="tt">Total: ${fmt(total(o.A))} por semana</span><span>Folgas: ${joinE(offNames(o.A))}</span>${n8?`<span class="w">⚠️ ${n8===1?'1 dia passa':`${n8} dias passam`} de 8 horas: precisa de acordo de compensação (fale com o seu contador)</span>`:'<span>✅ Nenhum dia passa de 8 horas</span>'}</div>
+    </div>`}).join('')||'<p>Não foi possível montar opções com o horário de hoje. Volte ao passo 1 e confira os horários.</p>'}</div>
     <details class="adj"><summary>✏️ Quer ajustar os horários da opção escolhida?</summary><div>
       ${sat?`<div class="tabs" role="tablist"><button type="button" role="tab" data-team="A" aria-selected="${tw==='A'}">Turma A (folga sáb. e dom.)</button><button type="button" role="tab" data-team="B" aria-selected="${tw==='B'}">Turma B (folga dom. e seg.)</button></div>`:''}
       ${weekEditor(teams[tw],'edNew')}
